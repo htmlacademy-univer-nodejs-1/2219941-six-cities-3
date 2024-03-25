@@ -1,9 +1,6 @@
 import {FileReader} from './file-reader.interface';
 import {readFileSync} from 'node:fs';
-import {Offer} from '../../types/offer.type';
-import {HousingType} from '../../types/housing-type.enum';
-import {Convenience} from '../../types/convenience.enum';
-import {UserType} from '../../types/user-type.enum';
+import {Offer, HousingType, Convenience, UserType} from '../../types';
 
 export class TsvFileReader implements FileReader {
   private rawData = '';
