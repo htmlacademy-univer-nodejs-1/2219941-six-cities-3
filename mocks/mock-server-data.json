@@ -1,0 +1,72 @@
+{
+  "api": {
+    "name": [
+      "Pretty Room",
+      "Ugly House",
+      "Ghost apartments",
+      "Haunted place",
+      "Gorgiekfs Flattt"
+    ],
+    "description": [
+      "Просторная квартира с панорамным видом на город, современный дизайн",
+      "Уютные апартаменты с балконом, полностью оборудованная кухня, рядом с центром",
+      "Элегантные студии в центре города, с высокими потолками и изысканным интерьером",
+      "Светлая и просторная двухкомнатная квартира, близость к парку и магазинам",
+      "Модерн и функционально обставленные апартаменты с Wi-Fi и кондиционером"
+    ],
+    "city": [
+      "Paris",
+      "Cologne",
+      "Brussels",
+      "Amsterdam",
+      "Hamburg",
+      "Dusseldorf"
+    ],
+    "imagePreview": [
+      "mock1.jpg",
+      "mock2.jpg",
+      "mock3.jpg",
+      "mock4.jpg",
+      "mock5.jpg",
+      "mock6.jpg",
+      "mock7.jpg",
+      "mock8.jpg",
+      "mock9.jpg",
+      "mock10.jpg"
+    ],
+    "user": [
+      "Lola",
+      "Smartie",
+      "Loser",
+      "Kitty",
+      "Denis"
+    ],
+    "email": [
+      "user1@gmail.com",
+      "user2@gmail.com",
+      "user3@gmail.com",
+      "user4@gmail.com",
+      "user5@gmail.com"
+    ],
+    "avatar": [
+      "avat1.jpeg",
+      "avat13rew.jpeg",
+      "avat404.jpeg",
+      "avataaaar.jpeg",
+      "avavkavataria.jpeg"
+    ],
+    "password": [
+      "avat1",
+      "avat13rew",
+      "avat404",
+      "avataaaar",
+      "avavkavataria"
+    ],
+    "coordinates": [
+      "latitude: 48.85661, longitude: 2.351499",
+      "latitude: 50.938361, longitude: 6.959974",
+      "latitude: 52.370216, longitude: 4.895168",
+      "latitude: 51.225402, longitude: 6.776314"
+    ]
+  }
+}
