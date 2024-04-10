@@ -1,6 +1,6 @@
 import {OfferGenerator} from './offer-generator.interface';
-import {Convenience, HousingType, MockServerData, UserType} from '../../types';
-import {generateRandomValue, getRandomItem, getRandomItems} from '../helpers';
+import {Convenience, HousingType, MockServerData, UserType} from '../../../types';
+import {generateRandomValue, getRandomItem, getRandomItems} from '../../helpers';
 import dayjs from 'dayjs';
 
 const MIN_RATING = 1;
