@@ -1,5 +1,5 @@
 import {Command} from '../command.interface';
-import {TsvFileReader} from '../../shared/file-reader';
+import {TsvFileReader} from '../../shared/libs/file-reader';
 import chalk from 'chalk';
 import {createOffer, getErrorMessage} from '../../shared/helpers';
 

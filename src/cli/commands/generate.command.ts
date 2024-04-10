@@ -1,8 +1,8 @@
 import got from 'got';
 import {Command} from '../command.interface';
 import {MockServerData} from '../../types';
-import {TsvOfferGenerator} from '../../shared/offer-generator';
-import {TsvFileWriter} from '../../shared/file-writer';
+import {TsvOfferGenerator} from '../../shared/libs/offer-generator';
+import {TsvFileWriter} from '../../shared/libs/file-writer';
 import {getErrorMessage} from '../../shared/helpers';
 
 export class GenerateCommand implements Command {
