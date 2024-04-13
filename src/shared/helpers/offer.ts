@@ -1,6 +1,6 @@
-import {Convenience, HousingType} from '../../types';
+import {Convenience, HousingType, Offer, UserType} from '../../types/index.js';
 
-export function createOffer(offerData: string) {
+export function createOffer(offerData: string): Offer {
   const [
     name,
     description,
@@ -30,7 +30,7 @@ export function createOffer(offerData: string) {
     email,
     avatar,
     password,
-    type
+    type: type as UserType
   };
 
   return {
