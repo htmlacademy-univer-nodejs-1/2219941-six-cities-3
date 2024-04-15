@@ -1,0 +1,704 @@
+openapi: 3.1.0
+info:
+  title: API сервер для проекта «Шесть городов».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Шесть городов».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 2.0.0
+tags:
+  - name: offers
+    description: Действия с объявлениями.
+  - name: users
+    description: Действия с пользователем.
+  - name: comments
+    description: Действия с комментариями.
+paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Создание нового пользователя
+      description: Создает нового пользователя на основе переданных данных.
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+
+        responses:
+          "201":
+            description: Пользователь зарегистрирован. Объект пользователя.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/user'
+
+          "400":
+            description: Введены некорректные данные.
+
+          "409":
+            description: Пользователь с таким email уже существует.
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Авторизация пользователя
+      description: Авторизует пользователя на основе логина и пароля
+
+      requestBody:
+        description: Информация для авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginUser'
+        required: true
+
+        responses:
+          "201":
+            description: Пользователь авторизован. Передан токен.
+            content:
+              application/json:
+                schema:
+                  properties:
+                    token:
+                      type: string
+
+          "401":
+            description: Данный пользователь не зарегистрирован.
+
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя
+      description: Возвращает информацию о пользователе и токен состояния
+
+      requestBody:
+        description: Информация для проверки состояния пользователя.
+        content:
+          application/json:
+            schema:
+              properties:
+                token:
+                  type: string
+        required: true
+
+        responses:
+          "200":
+            description: Пользователь авторизован.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/user'
+
+          "401":
+            description: Данный пользователь не авторизован.
+
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Завершение сеанса пользователя
+      description: Проверяет токен и завершает пользовательский сеанс
+
+      requestBody:
+        description: Информация для выхода из аккаунта пользователя.
+        content:
+          application/json:
+            schema:
+              properties:
+                token:
+                  type: string
+        required: true
+
+        responses:
+          "204":
+            description: Совершен выход из аккаунта.
+
+          "401":
+            description: Данный пользователь не авторизован.
+
+  /offers/create:
+    post:
+      tags:
+        - offers
+      summary: Создание нового предложения
+      description: Создает новое предложение на основе переданных данных.
+
+      requestBody:
+        description: Информация для создания нового предложения.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOffer'
+        required: true
+
+        responses:
+          "201":
+            description: Предложение создано. Объект предложения.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/offer'
+
+          "400":
+            description: Введены некорректные данные.
+
+          "401":
+            description: Данный пользователь не авторизирован.
+
+  /offers/edit:
+    put:
+      tags:
+        - offers
+      summary: Редактирование предложения
+      description: Редактирует предложение об аренде
+
+      requestBody:
+        description: Отредактированное предложение.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offer'
+        required: true
+
+        responses:
+          "201":
+            description: Предложение отредактировано.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/offer'
+
+          "400":
+            description: Переданы некорректные данные.
+
+          "401":
+            description: Данный пользователь не авторизирован.
+
+          "403":
+            description: У данного пользователя нет доступа к предложению.
+
+  /offers/delete:
+    delete:
+      tags:
+        - offers
+      summary: Удаление предложения по аренде
+      description: Удаляет предложение по аренде
+
+      requestBody:
+        description: Информация об удаляемом предложении.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offer'
+        required: true
+
+        responses:
+          "204":
+            description: Предложение удалено.
+
+          "401":
+            description: Данный пользователь не авторизован.
+
+          "403":
+            description: У данного пользователя нет доступа к предложению.
+
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: Список предложений по аренде
+      description: Возвращает список предложений по аренде
+
+      requestBody:
+        description: Количество возвращаемых предложений.
+        content:
+          application/json:
+            schema:
+              properties:
+                  count:
+                    type: number
+        required: true
+
+        responses:
+          "200":
+            description: Список предложений.
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/getOffer'
+
+          "400":
+            description: Переданы некорректные данные.
+
+  /offers/getOne:
+    get:
+      tags:
+        - offers
+      summary: Детальная информация по предложению
+      description: Возвращает информацию по одному предложению
+
+      requestBody:
+        description: Информация по предложению.
+        content:
+          application/json:
+            schema:
+              properties:
+                offerId:
+                  type: string
+        required: true
+
+        responses:
+          "200":
+            description: Детальная информация по предложению.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/offer'
+
+          "400":
+            description: Переданы некорректные данные.
+
+  /offers/getPremium:
+    get:
+      tags:
+        - offers
+      summary: Премиальные предложения для города
+      description: Возвращает премиальные предложения для города
+
+      requestBody:
+        description: Информация о городе.
+        content:
+          application/json:
+            schema:
+              properties:
+                cityName:
+                  type: string
+        required: true
+
+        responses:
+          "200":
+            description: Список премиальных предложений для города.
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/getOffer'
+
+          "400":
+            description: Переданы некорректные данные.
+
+  /offers/getFavourite:
+    get:
+      tags:
+        - offers
+      summary: Список избранных предложений
+      description: Возвращает список избранных предложений
+
+      responses:
+        "200":
+          description: Список избранных предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/getOffer'
+
+          "400":
+            description: Переданы некорректные данные.
+
+          "401":
+            description: Данный пользователь не авторизован.
+
+  /offers/changeFavourite:
+    put:
+      tags:
+        - offers
+      summary: Добавить или удалить из избранного
+      description: Добавляет или удаляет предложение из избранного
+
+      requestBody:
+        description: Информация о предложении.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offer'
+        required: true
+
+        responses:
+          "204":
+            description: Изменен статус предложения.
+
+          "400":
+            description: Переданы некорректные данные.
+
+          "401":
+            description: Данный пользователь не авторизован.
+
+  /comments:
+    get:
+      tags:
+        - comments
+      summary: Список комментариев для предложения
+      description: Возвращает список комментариев для предложения
+
+      requestBody:
+        description: Предложение
+        content:
+          application/json:
+            schema:
+              properties:
+                offerId:
+                  type: string
+        required: true
+
+        responses:
+          "200":
+            description: Список комментариев.
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/comment'
+
+          "400":
+            description: Переданы некорректные данные.
+
+    post:
+      tags:
+        - comments
+      summary: Добавление комментария
+      description: Добавляет комментарий к предложению об аренде
+
+      requestBody:
+        description: Комментарий для добавления
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/comment'
+        required: true
+
+        responses:
+          "200":
+            description: Комментарий создан.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/comment'
+
+          "400":
+            description: Введены некорректные данные.
+
+          "401":
+            description: Данный пользователь не авторизирован.
+
+
+
+
+
+components:
+  schemas:
+    createUser:
+      type: object
+
+      properties:
+        userName:
+          type: string
+          example: Keks
+
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+
+        avatar:
+          type: string
+          example: avatarchik.jpeg
+
+        password:
+          type: string
+          example: 123456
+
+        type:
+          type: string
+          example: pro
+
+    loginUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+
+        password:
+          type: string
+          example: 123456
+
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        userName:
+          type: string
+          example: Keks
+
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+
+        avatar:
+          type: string
+          example: avatarchik.jpeg
+
+        type:
+          type: string
+          example: pro
+
+    createOffer:
+      type: object
+
+      id:
+        type: string
+        example: 6329c3d6a04ab1061c6425ea
+
+      properties:
+        name:
+          type: string
+          example: Cool offer
+
+        description:
+          type: string
+          example: Very nice accommodation
+
+        date:
+          type: string
+          example: 2024-03-06T20:15:42.792Z
+
+        city:
+          type: string
+          example: Tokyo
+
+        imagePreview:
+          type: string
+          example: image-preview.jpeg
+
+        offerImages:
+          type: array
+          example: [ image-offer-1.jpeg, image-offer-2.jpeg, image-offer-3.jpeg, image-offer-4.jpeg, image-offer-5.jpeg, image-offer-6.jpeg ]
+
+        isPremium:
+          type: boolean
+          example: True
+
+        isFavorite:
+          type: boolean
+          example: False
+
+        rating:
+          type: number
+          example: 5
+
+        housingType:
+          type: string
+          example: room
+
+        roomNumber:
+          type: number
+          example: 2
+
+        guestNumber:
+          type: number
+          example: 2
+
+        price:
+          type: number
+          example: 20000
+
+        conveniences:
+          type: array
+          example: [ Baby seat, Fridge ]
+
+        user:
+          type: object
+          example: {
+            id: 6329c3d6a04ab1061c6425ea,
+            userName: Keks,
+            email: keks@htmlacademy.ru,
+            avatar: avatarchik.jpeg,
+            type: pro
+          }
+
+        commentsNumber:
+          type: number
+          example: 7
+
+        coordinates:
+          type: string
+          example: latitude 52.370216 longitude 4.895168
+
+    offer:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        name:
+          type: string
+          example: Cool offer
+
+        description:
+          type: string
+          example: Very nice accommodation
+
+        date:
+          type: string
+          example: 2024-03-06T20:15:42.792Z
+
+        city:
+          type: string
+          example: Tokyo
+
+        imagePreview:
+          type: string
+          example: image-preview.jpeg
+
+        offerImages:
+          type: array
+          example: [image-offer-1.jpeg, image-offer-2.jpeg, image-offer-3.jpeg, image-offer-4.jpeg, image-offer-5.jpeg, image-offer-6.jpeg]
+
+        isPremium:
+          type: boolean
+          example: True
+
+        isFavorite:
+          type: boolean
+          example: False
+
+        rating:
+          type: number
+          example: 5
+
+        housingType:
+          type: string
+          example: room
+
+        roomNumber:
+          type: number
+          example: 2
+
+        guestNumber:
+          type: number
+          example: 2
+
+        price:
+          type: number
+          example: 20000
+
+        conveniences:
+          type: array
+          example: [Baby seat, Fridge]
+
+        user:
+          type: object
+          example: {
+            id: 6329c3d6a04ab1061c6425ea,
+            userName: Keks,
+            email: keks@htmlacademy.ru,
+            avatar: avatarchik.jpeg,
+            type: pro
+          }
+
+        commentsNumber:
+          type: number
+          example: 7
+
+        coordinates:
+          type: string
+          example: latitude 52.370216 longitude 4.895168
+    getOffer:
+      type: object
+
+      properties:
+        name:
+          type: string
+          example: Cool offer
+
+        date:
+          type: string
+          example: 2024-03-06T20:15:42.792Z
+
+        city:
+          type: string
+          example: Tokyo
+
+        imagePreview:
+          type: string
+          example: image-preview.jpeg
+
+        isPremium:
+          type: boolean
+          example: True
+
+        isFavorite:
+          type: boolean
+          example: False
+
+        rating:
+          type: number
+          example: 5
+
+        housingType:
+          type: string
+          example: room
+
+        price:
+          type: number
+          example: 20000
+
+        commentsNumber:
+          type: number
+          example: 7
+
+    comment:
+      type: object
+
+      properties:
+        text:
+          type: string
+          example: Комната класс!
+
+        date:
+          type: string
+          example: 2024-03-06T20:15:42.792Z
+
+        rating:
+          type: number
+          example: 7.7
+
+        author:
+          type: object
+          example: {
+            id: 6329c3d6a04ab1061c6425ea,
+            userName: Keks,
+            email: keks@htmlacademy.ru,
+            avatar: avatarchik.jpeg,
+            type: pro
+          }
