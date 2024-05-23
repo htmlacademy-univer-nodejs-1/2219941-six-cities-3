@@ -1,7 +1,6 @@
 import {HousingType} from './housing-type.enum';
 import {Convenience} from './convenience.enum';
 import {User} from './user.type';
-import {Coordinates} from './coordinates.type';
 
 export type Offer = {
   name: string;
@@ -12,7 +11,7 @@ export type Offer = {
   offerImages: string[];
   isPremium: boolean;
   isFavorite: boolean;
-  rating: number;
+  rating: number[];
   housingType: HousingType;
   roomNumber: number;
   guestNumber: number;
@@ -20,5 +19,5 @@ export type Offer = {
   conveniences: Convenience[];
   user: User;
   commentsNumber: number;
-  coordinates: Coordinates
+  coordinates: string[]
 }

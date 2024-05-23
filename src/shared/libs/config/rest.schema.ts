@@ -30,19 +30,19 @@ export const configRestSchema = convict<RestSchema>({
     doc: 'String with random symbols',
     env: 'SALT',
     format: String,
-    default: null
+    default: ''
   },
   DB_USER: {
     doc: 'Database user name',
     env: 'DB_USER',
     format: String,
-    default: null
+    default: ''
   },
   DB_PASSWORD: {
     doc: 'Database user password',
     env: 'DB_PASSWORD',
     format: String,
-    default: null
+    default: ''
   },
   DB_PORT: {
     doc: 'Port for database',

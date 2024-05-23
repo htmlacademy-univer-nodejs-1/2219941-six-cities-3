@@ -10,19 +10,19 @@ export interface UserEntity extends defaultClasses.Base {}
   }
 })
 export class UserEntity extends defaultClasses.TimeStamps implements User {
-  @prop({ required: true, default: '' })
+  @prop({ required: true, default: '', type: () => String })
   public userName: string;
 
-  @prop({ unique: true, required: true })
+  @prop({ unique: true, required: true, type: () => String })
   public email: string;
 
-  @prop({ required: false, default: ''})
+  @prop({ required: false, default: '', type: () => String })
   public avatar: string;
 
-  @prop({ required: true, default: ''})
+  @prop({ required: true, default: '', type: () => String })
   private password?: string;
 
-  @prop({ required: true })
+  @prop({ required: true, type: () => String, enum: UserType })
   public type: UserType;
 
   constructor(userData: User) {
