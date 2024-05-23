@@ -42,7 +42,7 @@ export function createOffer(offerData: string): Offer {
     offerImages: offerImages.split(',').map((image) => image.trim()),
     isPremium: Boolean(parseInt(isPremium, 10)),
     isFavorite: Boolean(parseInt(isFavorite, 10)),
-    rating: Number.parseInt(rating, 10),
+    rating: [Number.parseInt(rating, 10)],
     housingType: housingType as HousingType,
     roomNumber: Number.parseInt(roomNumber, 10),
     guestNumber: Number.parseInt(guestNumber, 10),
@@ -50,9 +50,9 @@ export function createOffer(offerData: string): Offer {
     conveniences: conveniences.split(',').map((convenience) => convenience.trim() as Convenience),
     user,
     commentsNumber: Number.parseInt(commentsNumber, 10),
-    coordinates: {
-      latitude: coordinates.split(',')[0].split(':')[1].trim(),
-      longitude: coordinates.split(',')[1].split(':')[1].trim()
-    }
+    coordinates: [
+      coordinates.split(',')[0].split(':')[1].trim(),
+      coordinates.split(',')[1].split(':')[1].trim()
+    ]
   };
 }

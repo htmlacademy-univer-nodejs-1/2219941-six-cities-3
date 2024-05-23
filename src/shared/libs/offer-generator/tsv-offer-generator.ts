@@ -40,7 +40,7 @@ export class TsvOfferGenerator implements OfferGenerator{
     const offerImages = getRandomItems<string>(this.mockData.imagePreview);
     const isPremium = getRandomItem<string>(STATUS_VARIANTS);
     const isFavorite = getRandomItem<string>(STATUS_VARIANTS);
-    const rating = generateRandomValue(MIN_RATING, MAX_RATING).toString();
+    const rating = [generateRandomValue(MIN_RATING, MAX_RATING).toString()];
     const housing = getRandomItem<string>([HousingType.House, HousingType.Room, HousingType.Hotel, HousingType.Apartment]);
     const rooms = generateRandomValue(MIN_ROOMS, MAX_ROOMS).toString();
     const guests = generateRandomValue(MIN_GUESTS, MAX_GUESTS).toString();

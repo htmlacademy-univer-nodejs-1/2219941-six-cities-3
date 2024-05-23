@@ -1,7 +1,7 @@
 import {Command} from '../command.interface';
 import {TsvFileReader} from '../../shared/libs/file-reader/index.js';
 import chalk from 'chalk';
-import {createOffer, getErrorMessage, getMongoDBURL} from '../../shared/helpers/index.js';
+import {createOffer, getErrorMessage, getMongoDBURI} from '../../shared/helpers/index.js';
 import {UserService} from '../../shared/modules/user/user-service.interface.js';
 import {DefaultOfferService, OfferModel, OfferService} from '../../shared/modules/offer/index.js';
 import {DatabaseClient, MongoDatabaseClient} from '../../shared/libs/database-client/index.js';
@@ -72,11 +72,10 @@ export class ImportCommand implements Command {
 
   public async execute(fileName: string, login: string, password: string,
     host: string, dbname: string, salt: string): Promise<void> {
-    const url = getMongoDBURL(login, password, host, DEFAULT_DB_PORT, dbname);
+    const uri = getMongoDBURI(login, password, host, DEFAULT_DB_PORT, dbname);
     this.salt = salt;
 
-    await this.databaseClient.connect(url);
-
+    await this.databaseClient.connect(uri);
     const fileReader = new TsvFileReader(fileName.trim());
 
     fileReader.on('line', this.onImportedLine);

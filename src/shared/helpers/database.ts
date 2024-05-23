@@ -1,4 +1,4 @@
-export function getMongoDBURL(
+export function getMongoDBURI(
   username: string,
   password: string,
   host: string,
