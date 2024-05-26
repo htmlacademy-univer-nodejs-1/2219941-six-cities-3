@@ -152,7 +152,7 @@ paths:
           "401":
             description: Данный пользователь не авторизирован.
 
-  /offers/edit:
+  /offers/{offerId}/edit:
     put:
       tags:
         - offers
@@ -166,6 +166,13 @@ paths:
             schema:
               $ref: '#/components/schemas/offer'
         required: true
+
+        parameters:
+          - name: offerId
+            in: path
+            required: true
+            schema:
+              type: string
 
         responses:
           "201":
@@ -184,7 +191,7 @@ paths:
           "403":
             description: У данного пользователя нет доступа к предложению.
 
-  /offers/delete:
+  /offers/{offerId}/delete:
     delete:
       tags:
         - offers
@@ -198,6 +205,12 @@ paths:
             schema:
               $ref: '#/components/schemas/offer'
         required: true
+        parameters:
+          - name: offerId
+            in: path
+            required: true
+            schema:
+              type: string
 
         responses:
           "204":
@@ -224,22 +237,22 @@ paths:
               properties:
                   count:
                     type: number
-        required: true
+        required: false
 
-        responses:
-          "200":
-            description: Список предложений.
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/getOffer'
+      responses:
+        "200":
+          description: Список предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/getOffer'
 
-          "400":
-            description: Переданы некорректные данные.
+        "400":
+          description: Переданы некорректные данные.
 
-  /offers/getOne:
+  /offers/{offerId}:
     get:
       tags:
         - offers
@@ -255,6 +268,13 @@ paths:
                 offerId:
                   type: string
         required: true
+
+        parameters:
+          - name: offerId
+            in: path
+            required: true
+            schema:
+              type: string
 
         responses:
           "200":
@@ -297,7 +317,7 @@ paths:
           "400":
             description: Переданы некорректные данные.
 
-  /offers/getFavourite:
+  /offers/getFavorite:
     get:
       tags:
         - offers
@@ -320,7 +340,7 @@ paths:
           "401":
             description: Данный пользователь не авторизован.
 
-  /offers/changeFavourite:
+  /offers/changeFavorite/{offerId}:
     put:
       tags:
         - offers
@@ -334,6 +354,13 @@ paths:
             schema:
               $ref: '#/components/schemas/offer'
         required: true
+
+        parameters:
+          - name: offerId
+            in: path
+            required: true
+            schema:
+              type: string
 
         responses:
           "204":
