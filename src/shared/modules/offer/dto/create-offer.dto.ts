@@ -2,7 +2,7 @@ import {Convenience, HousingType} from '../../../../types/index.js';
 import {
   IsArray,
   IsBoolean,
-  IsDateString, IsEnum, IsIn, IsInt, IsMongoId,
+  IsDateString, IsEnum, IsIn, IsInt,
   IsNumber, IsOptional, IsString,
   Max,
   MaxLength,
@@ -67,7 +67,6 @@ export class CreateOfferDto {
   @IsEnum(Convenience, {each: true, message: OfferDTOValidationMessage.conveniences.invalidType})
   public conveniences: Convenience[];
 
-  @IsMongoId({message: OfferDTOValidationMessage.user.invalidFormat})
   public user: string;
 
   @IsInt({message: OfferDTOValidationMessage.commentsNumber.invalidFormat})
