@@ -1,8 +1,14 @@
 import {inject, injectable} from 'inversify';
-import {Controller, HttpError, HttpMethod, ValidateDtoMiddleware} from '../../libs/application/index.js';
+import {
+  Controller,
+  HttpError,
+  HttpMethod,
+  UploadFileMiddleware,
+  ValidateDtoMiddleware, ValidateObjectidMiddleware
+} from '../../libs/application/index.js';
 import {Component} from '../../../types/index.js';
 import {Logger} from '../../libs/logger/index.js';
-import {Response} from 'express';
+import {Request, Response} from 'express';
 import {CreateUserRequest} from './create-user.request.js';
 import {UserService} from './user-service.interface';
 import {Config, RestSchema} from '../../libs/config/index.js';
@@ -37,6 +43,15 @@ export class UserController extends Controller {
     });
     this.addRoute({ path: '/login', method: HttpMethod.Get, handler: this.check});
     this.addRoute({ path: '/logout', method: HttpMethod.Delete, handler: this.logout});
+    this.addRoute({
+      path: '/:userId/avatar',
+      method: HttpMethod.Post,
+      handler: this.uploadAvatar,
+      middlewares: [
+        new ValidateObjectidMiddleware('userId'),
+        new UploadFileMiddleware(this.configService.get('UPLOADS_DIRECTORY'), 'avatar')
+      ]
+    });
   }
 
   public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
@@ -103,5 +118,9 @@ export class UserController extends Controller {
       'Not implemented',
       'UserController'
     );
+  }
+
+  public async uploadAvatar(req: Request, res: Response) {
+    this.created(res, {filepath: req.file?.path});
   }
 }
