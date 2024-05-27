@@ -14,10 +14,10 @@ export class CommentEntity extends defaultClasses.TimeStamps {
   @prop({trim: true, required: true, type: () => String })
   public text: string;
 
-  @prop({required: true, type: () => Date })
+  @prop({required: false, type: () => Date })
   public createdAt: Date;
 
-  @prop({required: true, type: () => Number})
+  @prop({required: false, type: () => Number})
   public rating: number;
 
   @prop({ref: OfferEntity, required: true})

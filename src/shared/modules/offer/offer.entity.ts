@@ -34,8 +34,8 @@ export class OfferEntity extends defaultClasses.TimeStamps{
   @prop({ required: true, default: false, type: () => Boolean })
   public isFavorite: boolean;
 
-  @prop({ required: true, default: 0, type: () => Array<number> })
-  public rating: number[];
+  @prop({ required: true, default: 0, type: () => Number })
+  public rating: number;
 
   @prop({
     type: () => String,
@@ -55,7 +55,7 @@ export class OfferEntity extends defaultClasses.TimeStamps{
   @prop({ required: true, type: () => Array<Convenience> })
   public conveniences!: Convenience[];
 
-  @prop({ ref: UserEntity, required: true })
+  @prop({ ref: UserEntity, required: true, type: () => String })
   public user!: Ref<UserEntity>;
 
   @prop({ default: 0, type: () => Number })

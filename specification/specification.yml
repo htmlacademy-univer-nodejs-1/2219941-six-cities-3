@@ -123,7 +123,36 @@ paths:
           "401":
             description: Данный пользователь не авторизован.
 
-  /offers/create:
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: Список предложений по аренде
+      description: Возвращает список предложений по аренде
+
+      requestBody:
+        description: Количество возвращаемых предложений.
+        content:
+          application/json:
+            schema:
+              properties:
+                  count:
+                    type: number
+        required: false
+
+      responses:
+        "200":
+          description: Список предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/getOffer'
+
+        "400":
+          description: Переданы некорректные данные.
+
     post:
       tags:
         - offers
@@ -152,8 +181,72 @@ paths:
           "401":
             description: Данный пользователь не авторизирован.
 
-  /offers/{offerId}/edit:
-    put:
+  /offers/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Детальная информация по предложению
+      description: Возвращает информацию по одному предложению
+
+      requestBody:
+        description: Информация по предложению.
+        content:
+          application/json:
+            schema:
+              properties:
+                offerId:
+                  type: string
+        required: true
+
+        parameters:
+          - name: offerId
+            in: path
+            required: true
+            schema:
+              type: string
+
+        responses:
+          "200":
+            description: Детальная информация по предложению.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/offer'
+
+          "400":
+            description: Переданы некорректные данные.
+
+    delete:
+      tags:
+        - offers
+      summary: Удаление предложения по аренде
+      description: Удаляет предложение по аренде
+
+      requestBody:
+        description: Информация об удаляемом предложении.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offer'
+        required: true
+        parameters:
+          - name: offerId
+            in: path
+            required: true
+            schema:
+              type: string
+
+        responses:
+          "204":
+            description: Предложение удалено.
+
+          "401":
+            description: Данный пользователь не авторизован.
+
+          "403":
+            description: У данного пользователя нет доступа к предложению.
+
+    patch:
       tags:
         - offers
       summary: Редактирование предложения
@@ -191,103 +284,7 @@ paths:
           "403":
             description: У данного пользователя нет доступа к предложению.
 
-  /offers/{offerId}/delete:
-    delete:
-      tags:
-        - offers
-      summary: Удаление предложения по аренде
-      description: Удаляет предложение по аренде
-
-      requestBody:
-        description: Информация об удаляемом предложении.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/offer'
-        required: true
-        parameters:
-          - name: offerId
-            in: path
-            required: true
-            schema:
-              type: string
-
-        responses:
-          "204":
-            description: Предложение удалено.
-
-          "401":
-            description: Данный пользователь не авторизован.
-
-          "403":
-            description: У данного пользователя нет доступа к предложению.
-
-  /offers:
-    get:
-      tags:
-        - offers
-      summary: Список предложений по аренде
-      description: Возвращает список предложений по аренде
-
-      requestBody:
-        description: Количество возвращаемых предложений.
-        content:
-          application/json:
-            schema:
-              properties:
-                  count:
-                    type: number
-        required: false
-
-      responses:
-        "200":
-          description: Список предложений.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/getOffer'
-
-        "400":
-          description: Переданы некорректные данные.
-
-  /offers/{offerId}:
-    get:
-      tags:
-        - offers
-      summary: Детальная информация по предложению
-      description: Возвращает информацию по одному предложению
-
-      requestBody:
-        description: Информация по предложению.
-        content:
-          application/json:
-            schema:
-              properties:
-                offerId:
-                  type: string
-        required: true
-
-        parameters:
-          - name: offerId
-            in: path
-            required: true
-            schema:
-              type: string
-
-        responses:
-          "200":
-            description: Детальная информация по предложению.
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/offer'
-
-          "400":
-            description: Переданы некорректные данные.
-
-  /offers/getPremium:
+  /offers/premium:
     get:
       tags:
         - offers
@@ -317,7 +314,7 @@ paths:
           "400":
             description: Переданы некорректные данные.
 
-  /offers/getFavorite:
+  /offers/collection/favorite:
     get:
       tags:
         - offers
@@ -340,7 +337,7 @@ paths:
           "401":
             description: Данный пользователь не авторизован.
 
-  /offers/changeFavorite/{offerId}:
+  /offers/collection/favorite/{offerId}:
     put:
       tags:
         - offers
@@ -372,7 +369,7 @@ paths:
           "401":
             description: Данный пользователь не авторизован.
 
-  /comments:
+  /offers/{offerId}/comments:
     get:
       tags:
         - comments
@@ -402,6 +399,7 @@ paths:
           "400":
             description: Переданы некорректные данные.
 
+  /comments:
     post:
       tags:
         - comments
@@ -413,7 +411,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/comment'
+              $ref: '#/components/schemas/createComment'
         required: true
 
         responses:
@@ -562,22 +560,16 @@ components:
           example: [ Baby seat, Fridge ]
 
         user:
-          type: object
-          example: {
-            id: 6329c3d6a04ab1061c6425ea,
-            userName: Keks,
-            email: keks@htmlacademy.ru,
-            avatar: avatarchik.jpeg,
-            type: pro
-          }
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
 
         commentsNumber:
           type: number
           example: 7
 
         coordinates:
-          type: string
-          example: latitude 52.370216 longitude 4.895168
+          type: array
+          example: [52.370216, 4.895168]
 
     offer:
       type: object
@@ -720,12 +712,22 @@ components:
           type: number
           example: 7.7
 
-        author:
-          type: object
-          example: {
-            id: 6329c3d6a04ab1061c6425ea,
-            userName: Keks,
-            email: keks@htmlacademy.ru,
-            avatar: avatarchik.jpeg,
-            type: pro
-          }
+        user:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+    createComment:
+      type: object
+
+      properties:
+        text:
+           type: string
+           example: Комната класс!
+
+        userId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        offerId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea

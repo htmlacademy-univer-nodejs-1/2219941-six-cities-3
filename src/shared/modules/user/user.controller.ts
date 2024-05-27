@@ -1,5 +1,5 @@
 import {inject, injectable} from 'inversify';
-import {Controller, HttpError, HttpMethod} from '../../libs/application/index.js';
+import {Controller, HttpError, HttpMethod, ValidateDtoMiddleware} from '../../libs/application/index.js';
 import {Component} from '../../../types/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {Response} from 'express';
@@ -10,6 +10,8 @@ import {StatusCodes} from 'http-status-codes';
 import {fillDTO} from '../../helpers';
 import {UserRdo} from './rdo/user.rdo';
 import {LoginUserRequest} from './login-user-request.type';
+import {CreateUserDto} from './dto/create-user.dto';
+import {LoginUserDto} from './dto/login-user.dto';
 
 @injectable()
 export class UserController extends Controller {
@@ -21,16 +23,23 @@ export class UserController extends Controller {
     super(logger);
     this.logger.info('Register routes for UserController…');
 
-    this.addRoute({ path: '/users/register', method: HttpMethod.Post, handler: this.create });
-    this.addRoute({ path: '/users/login', method: HttpMethod.Post, handler: this.login});
-    this.addRoute({ path: '/users/login', method: HttpMethod.Get, handler: this.check});
-    this.addRoute({ path: '/users/logout', method: HttpMethod.Delete, handler: this.logout});
+    this.addRoute({
+      path: '/register',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
+    });
+    this.addRoute({
+      path: '/login',
+      method: HttpMethod.Post,
+      handler: this.login,
+      middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
+    });
+    this.addRoute({ path: '/login', method: HttpMethod.Get, handler: this.check});
+    this.addRoute({ path: '/logout', method: HttpMethod.Delete, handler: this.logout});
   }
 
-  public async create(
-    { body }: CreateUserRequest,
-    res: Response
-  ): Promise<void> {
+  public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (existsUser) {
@@ -45,10 +54,7 @@ export class UserController extends Controller {
     this.created(res, fillDTO(UserRdo, result));
   }
 
-  public async login(
-    { body }: LoginUserRequest,
-    _res: Response
-  ): Promise<void> {
+  public async login({ body }: LoginUserRequest, _res: Response): Promise<void> {
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (! existsUser) {
@@ -66,10 +72,7 @@ export class UserController extends Controller {
     );
   }
 
-  public async check(
-    { body }: LoginUserRequest,
-    _res: Response
-  ): Promise<void> {
+  public async check({ body }: LoginUserRequest, res: Response): Promise<void> {
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (! existsUser) {
@@ -80,16 +83,10 @@ export class UserController extends Controller {
       );
     }
 
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'UserController'
-    );
+    this.ok(res, existsUser);
   }
 
-  public async logout(
-    { body }: LoginUserRequest,
-    _res: Response
+  public async logout({ body }: LoginUserRequest, _res: Response
   ): Promise<void> {
     const existsUser = await this.userService.findByEmail(body.email);
 
