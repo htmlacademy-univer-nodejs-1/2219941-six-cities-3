@@ -1,7 +1,6 @@
 import {inject, injectable} from 'inversify';
 import {
-  Controller,
-  HttpError,
+  Controller, DocumentExistMiddleware,
   HttpMethod,
   RequestBody,
   RequestParams,
@@ -13,7 +12,6 @@ import {CommentService} from './comment-service.interface';
 import {OfferService} from '../offer';
 import {Request, Response} from 'express';
 import {CreateCommentDto} from './dto/create-comment.dto';
-import {StatusCodes} from 'http-status-codes';
 import {fillDTO} from '../../helpers';
 import {CommentRdo} from './rdo/comment.rdo';
 
@@ -31,22 +29,16 @@ export default class CommentController extends Controller {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateCommentDto)]
+      middlewares: [
+        new ValidateDtoMiddleware(CreateCommentDto),
+        new DocumentExistMiddleware(this.offerService, 'Offer', 'offerId')]
     });
   }
 
   public async create({ body }: Request<RequestParams, RequestBody, CreateCommentDto>, res: Response): Promise<void> {
     const { offerId } = body;
-    if(! await this.offerService.exists(offerId)) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with id ${offerId} not found.`,
-        'CommentController'
-      );
-    }
-
     const result = await this.commentService.create(body);
-    await this.offerService.incCommentCount(body.offerId);
+    await this.offerService.incCommentCount(offerId);
     this.created(res, fillDTO(CommentRdo, result));
   }
 }

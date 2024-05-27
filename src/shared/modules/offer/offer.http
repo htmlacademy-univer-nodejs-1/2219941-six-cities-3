@@ -5,18 +5,8 @@ Content-Type: application/json
 
 ###
 
-## Добавить новый пост
-POST http://localhost:5000/offers HTTP/1.1
-Content-Type: application/json
-
-{
-
-}
-
-###
-
 ## Получить объявление по идентификатору
-GET http://localhost:5000/offers/665488abf0a4609133475326 HTTP/1.1
+GET http://localhost:5000/offers/664fcbe3020edc91933b4959 HTTP/1.1
 
 ###
 
@@ -71,9 +61,14 @@ PATCH http://localhost:5000/offers/664fcbe3020edc91933b4959 HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "HAUNTED PLACE",
+  "name": "not a real PLACE",
   "price": 11000
 }
+
+###
+
+## Получить комментарии
+GET http://localhost:5000/offers/664fcbe3020edc91933b4959/comments HTTP/1.1
 
 ###
 

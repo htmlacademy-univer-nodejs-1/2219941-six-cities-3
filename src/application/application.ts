@@ -6,7 +6,6 @@ import {DatabaseClient} from '../shared/libs/database-client/index.js';
 import {getMongoDBURI} from '../shared/helpers/index.js';
 import express, {Express} from 'express';
 import {Controller, ExceptionFilter} from '../shared/libs/application';
-import CommentController from '../shared/modules/comment/comment.controller';
 
 @injectable()
 export class Application {
@@ -19,7 +18,7 @@ export class Application {
     @inject(Component.OffersController) private readonly offersController: Controller,
     @inject(Component.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
     @inject(Component.UserController) private readonly userController: Controller,
-    @inject(Component.CommentController) private readonly commentController: CommentController
+    @inject(Component.CommentController) private readonly commentController: Controller
   ) {
     this.server = express();
   }
@@ -49,6 +48,10 @@ export class Application {
 
   private async _initMiddleware() {
     this.server.use(express.json());
+    this.server.use(
+      '/uploads',
+      express.static(this.config.get('UPLOADS_DIRECTORY'))
+    );
   }
 
   private async _initExceptionFilters() {
