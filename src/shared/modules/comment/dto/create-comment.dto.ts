@@ -6,7 +6,6 @@ export class CreateCommentDto {
   @MaxLength(1024, { message: CreateCommentValidationMessage.text.maxLength})
   public text: string;
 
-  @IsMongoId({message: CreateCommentValidationMessage.userId.invalidFormat})
   public userId: string;
 
   @IsMongoId({message: CreateCommentValidationMessage.offerId.invalidFormat})

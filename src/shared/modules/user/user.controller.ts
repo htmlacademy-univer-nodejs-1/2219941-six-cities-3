@@ -18,13 +18,16 @@ import {UserRdo} from './rdo/user.rdo';
 import {LoginUserRequest} from './login-user-request.type';
 import {CreateUserDto} from './dto/create-user.dto';
 import {LoginUserDto} from './dto/login-user.dto';
+import {AuthService} from '../auth';
+import {LoggedUserRdo} from './rdo/logged-user.rdo';
 
 @injectable()
 export class UserController extends Controller {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) private readonly userService: UserService,
-    @inject(Component.Config) private readonly configService: Config<RestSchema>
+    @inject(Component.Config) private readonly configService: Config<RestSchema>,
+    @inject(Component.AuthService) private readonly authService: AuthService
   ) {
     super(logger);
     this.logger.info('Register routes for UserController…');
@@ -69,36 +72,28 @@ export class UserController extends Controller {
     this.created(res, fillDTO(UserRdo, result));
   }
 
-  public async login({ body }: LoginUserRequest, _res: Response): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
-
-    if (! existsUser) {
-      throw new HttpError(
-        StatusCodes.UNAUTHORIZED,
-        `User with email ${body.email} not found.`,
-        'UserController'
-      );
-    }
-
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'UserController'
-    );
+  public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
+    const user = await this.authService.verify(body);
+    const token = await this.authService.authenticate(user);
+    const responseData = fillDTO(LoggedUserRdo, {
+      email: user.email,
+      token
+    });
+    this.ok(res, responseData);
   }
 
-  public async check({ body }: LoginUserRequest, res: Response): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
+  public async check({ tokenPayload: {email}}: Request, res: Response): Promise<void> {
+    const existsUser = await this.userService.findByEmail(email);
 
     if (! existsUser) {
       throw new HttpError(
         StatusCodes.UNAUTHORIZED,
-        `User with email ${body.email} not found.`,
+        `User with email ${email} not found.`,
         'UserController'
       );
     }
 
-    this.ok(res, existsUser);
+    this.ok(res, fillDTO(LoggedUserRdo, existsUser));
   }
 
   public async logout({ body }: LoginUserRequest, _res: Response
