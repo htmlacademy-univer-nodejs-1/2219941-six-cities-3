@@ -82,9 +82,9 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async updateRating(offerId: string, oldRating: number[], newRating: number): Promise<DocumentType<OfferEntity> | null> {
+  public async updateRating(offerId: string, oldRating: number, newRating: number): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
-      .findByIdAndUpdate(offerId, {rating: oldRating.concat([newRating])})
+      .findByIdAndUpdate(offerId, {rating: ((oldRating + newRating) / 2)})
       .exec();
   }
 

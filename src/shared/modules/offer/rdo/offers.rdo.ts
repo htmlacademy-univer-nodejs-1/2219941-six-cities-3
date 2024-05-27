@@ -1,4 +1,5 @@
-import {Expose} from 'class-transformer';
+import {Expose, Type} from 'class-transformer';
+import {UserRdo} from '../../user/rdo/user.rdo';
 
 export class OffersRdo {
   @Expose()
@@ -29,7 +30,7 @@ export class OffersRdo {
   public isFavorite: boolean;
 
   @Expose()
-  public rating: number[];
+  public rating: number;
 
   @Expose()
   public housingType: string;
@@ -48,4 +49,8 @@ export class OffersRdo {
 
   @Expose()
   public coordinates: string[];
+
+  @Expose()
+  @Type(() => UserRdo)
+  public user: UserRdo;
 }
