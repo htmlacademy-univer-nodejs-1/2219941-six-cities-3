@@ -86,3 +86,17 @@ GET http://localhost:5000/offers/collection/favorite HTTP/1.1
 PATCH http://localhost:5000/offers/collection/favorite/664fcbe3020edc91933b4959 HTTP/1.1
 
 ###
+
+## Загрузить изображение для объявления
+POST http://localhost:5000/offers/664fcbe3020edc91933b4959/image HTTP/1.1
+Authorization: keksij@yandex.ru eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imtla3NpakB5YW5kZXgucnUiLCJ1c2VybmFtZSI6InN1cGVyY2F0MTAwMCIsImlkIjoiNjY1NDg1YjU1ZDMyMDAyODNiMTRhMjRiIiwiaWF0IjoxNzE3NDk3NjI5LCJleHAiOjE3MTc2NzA0Mjl9.As0iLAf1NGL4oA7XHBtIcVtQBhZZP2B0Pagxn7_8eOA
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="sheep.jpg"
+Content-Type: image/jpg
+
+< /Users/alisa/sheep.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###

@@ -26,9 +26,6 @@ export class CreateOfferDto {
   @IsIn(['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'], { message: OfferDTOValidationMessage.city.invalidCity})
   public city: string;
 
-  @MaxLength(50, { message: OfferDTOValidationMessage.imagePreview.maxLength})
-  public imagePreview: string;
-
   @IsArray({message: OfferDTOValidationMessage.offerImages.invalidFormat})
   @IsString({each: true, message: OfferDTOValidationMessage.offerImages.invalidType})
   public offerImages: string[];
