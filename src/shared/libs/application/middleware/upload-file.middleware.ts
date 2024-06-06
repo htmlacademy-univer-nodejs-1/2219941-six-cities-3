@@ -2,7 +2,7 @@ import {Middleware} from './middleware.interface.js';
 import {NextFunction, Request, Response} from 'express';
 import multer, {diskStorage} from 'multer';
 import {extension} from 'mime-types';
-import * as crypto from 'crypto';
+import * as crypto from 'node:crypto';
 
 export class UploadFileMiddleware implements Middleware {
   constructor(
