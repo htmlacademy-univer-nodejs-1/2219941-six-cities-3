@@ -21,6 +21,7 @@ import {LoginUserDto} from './dto/login-user.dto';
 import {AuthService} from '../auth';
 import {LoggedUserRdo} from './rdo/logged-user.rdo';
 import {UploadUserAvatarRdo} from './rdo/upload-user-avatar.rdo';
+import {LogoutUserRequest} from './logout-user-request.type';
 
 @injectable()
 export class UserController extends Controller {
@@ -48,7 +49,7 @@ export class UserController extends Controller {
     this.addRoute({ path: '/login', method: HttpMethod.Get, handler: this.check});
     this.addRoute({ path: '/logout', method: HttpMethod.Delete, handler: this.logout});
     this.addRoute({
-      path: '/:userId/avatar',
+      path: '/avatar/:userId',
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [
@@ -94,23 +95,18 @@ export class UserController extends Controller {
     this.ok(res, fillDTO(LoggedUserRdo, existsUser));
   }
 
-  public async logout({ body }: LoginUserRequest, _res: Response
+  public async logout({ body }: LogoutUserRequest, res: Response
   ): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
-
-    if (! existsUser) {
+    if (!body.token) {
       throw new HttpError(
-        StatusCodes.UNAUTHORIZED,
-        `User with email ${body.email} not found.`,
-        'UserController'
+        StatusCodes.BAD_REQUEST,
+        'Not found token',
+        'UserController',
       );
     }
 
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'UserController'
-    );
+    const result = await this.authService.invalidateToken(body.token);
+    this.ok(res, result);
   }
 
   public async uploadAvatar({ params, file }: Request, res: Response) {

@@ -6,6 +6,7 @@ import {inject, injectable} from 'inversify';
 import {Component} from '../../../types/index.js';
 import {Logger} from '../../libs/logger/index.js';
 import {DEFAULT_AVATAR_FILE_NAME} from './user.constant';
+import {UpdateUserDto} from './dto/update-user.dto';
 
 @injectable()
 export class DefaultUserService implements UserService {
@@ -15,7 +16,8 @@ export class DefaultUserService implements UserService {
   ) {}
 
   public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
-    const user = new UserEntity({...dto, avatar: DEFAULT_AVATAR_FILE_NAME});
+    const newAvatar = dto.avatar ? dto.avatar : DEFAULT_AVATAR_FILE_NAME;
+    const user = new UserEntity({...dto, avatar: newAvatar});
     user.setPassword(dto.password, salt);
     const result = await this.userModel.create(user);
     this.logger.info(`New user created: ${user.email}`);
@@ -32,5 +34,17 @@ export class DefaultUserService implements UserService {
       return existedUser;
     }
     return this.create(dto, salt);
+  }
+
+  public async updateById(userId: string, dto: UpdateUserDto): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel
+      .findByIdAndUpdate(userId, dto, {new: true})
+      .exec();
+  }
+
+  public async findById(userId: string): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel
+      .findById(userId)
+      .exec();
   }
 }

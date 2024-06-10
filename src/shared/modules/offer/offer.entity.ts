@@ -16,9 +16,6 @@ export class OfferEntity extends defaultClasses.TimeStamps{
   @prop({ required: true, trim: true, type: () => String })
   public description!: string;
 
-  @prop({ required: true, type: () => Date })
-  public date!: Date;
-
   @prop({ required: true, type: () => String })
   public city!: string;
 
@@ -55,7 +52,7 @@ export class OfferEntity extends defaultClasses.TimeStamps{
   @prop({ required: true, type: () => Array<Convenience> })
   public conveniences!: Convenience[];
 
-  @prop({ ref: UserEntity, required: true, type: () => String })
+  @prop({ ref: UserEntity, required: true})
   public user!: Ref<UserEntity>;
 
   @prop({ default: 0, type: () => Number })

@@ -1,5 +1,6 @@
 import {Expose, Type} from 'class-transformer';
 import {UserRdo} from '../../user/rdo/user.rdo';
+import {Convenience} from '../../../../types';
 
 export class OffersRdo {
   @Expose()
@@ -16,6 +17,9 @@ export class OffersRdo {
 
   @Expose()
   public city: string;
+
+  @Expose()
+  public price: number;
 
   @Expose()
   public imagePreview: string;
@@ -42,13 +46,13 @@ export class OffersRdo {
   public guestNumber: number;
 
   @Expose()
-  public convenience: string[];
-
-  @Expose()
   public commentsNumber: number;
 
   @Expose()
   public coordinates: string[];
+
+  @Expose()
+  public conveniences: Convenience[];
 
   @Expose()
   @Type(() => UserRdo)

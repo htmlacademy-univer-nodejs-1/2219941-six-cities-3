@@ -12,5 +12,8 @@ export class LoggedUserRdo {
 
   @Expose()
   public avatar: string;
+
+  @Expose()
+  public id: string;
 }
 

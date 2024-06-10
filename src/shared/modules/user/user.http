@@ -5,8 +5,8 @@ POST http://localhost:5000/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "keksij@yandex.ru",
-  "avatar": "kaifik.jpg",
+  "email": "keksik5@yandex.ru",
+  "avatar": "gift.jpg",
   "userName": "supercat1000",
   "password": "shining",
   "type": "обычный"
@@ -20,8 +20,8 @@ POST http://localhost:5000/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "keksij@yandex.ru",
-  "password": "shining"
+  "email": "alisik12345@mail.ru",
+  "password": "123456789"
 }
 
 ###
@@ -42,6 +42,17 @@ Content-Type: image/png
 
 ## Проверить токен пользователя
 GET http://localhost:5000/users/login HTTP/1.1
-Authorization: keksij@yandex.ru eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imtla3NpakB5YW5kZXgucnUiLCJ1c2VybmFtZSI6InN1cGVyY2F0MTAwMCIsImlkIjoiNjY1NDg1YjU1ZDMyMDAyODNiMTRhMjRiIiwiaWF0IjoxNzE3NDk3NjI5LCJleHAiOjE3MTc2NzA0Mjl9.As0iLAf1NGL4oA7XHBtIcVtQBhZZP2B0Pagxn7_8eOA
+Authorization: alisik123456@mail.ru eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaXNpazEyMzQ1QG1haWwucnUiLCJ1c2VybmFtZSI6ImFsaXNpazEyMzQ1IiwiaWQiOiI2NjY2OWZkNzgzNjYzYzc1OTRkMGJmMTciLCJpYXQiOjE3MTgwMTQ0NTMsImV4cCI6MTcxODE4NzI1M30.GsIOqQuB_vLqrefsE2ieJgZHEW73K6AmOFZ8ZGOmqyk
+
+###
+
+## Выйти из приложения
+
+DELETE http://localhost:5000/users/logout HTTP/1.1
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFsaXNpazEyMzQ1QG1haWwucnUiLCJ1c2VybmFtZSI6ImFsaXNpazEyMzQ1IiwiaWQiOiI2NjY2OWZkNzgzNjYzYzc1OTRkMGJmMTciLCJpYXQiOjE3MTgwMTQ0NTMsImV4cCI6MTcxODE4NzI1M30.GsIOqQuB_vLqrefsE2ieJgZHEW73K6AmOFZ8ZGOmqyk"
+}
 
 ###
