@@ -99,8 +99,64 @@ paths:
           "401":
             description: Данный пользователь не авторизован.
 
-  /users/logout:
+  /users/avatar:
     post:
+      tags:
+        - users
+      summary: Добавить аватар пользователя
+      description: Загружает аватар в профиль пользователя
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Информация для авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginUser'
+        required: true
+
+        responses:
+          "201":
+            description: Пользователь авторизован. Передан токен.
+            content:
+              application/json:
+                schema:
+                  properties:
+                    token:
+                      type: string
+
+          "401":
+            description: Данный пользователь не зарегистрирован.
+
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя
+      description: Возвращает информацию о пользователе и токен состояния
+
+      requestBody:
+        description: Информация для проверки состояния пользователя.
+        content:
+          application/json:
+            schema:
+              properties:
+                token:
+                  type: string
+        required: true
+
+        responses:
+          "200":
+            description: Пользователь авторизован.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/user'
+
+          "401":
+            description: Данный пользователь не авторизован.
+
+  /users/logout:
+    delete:
       tags:
         - users
       summary: Завершение сеанса пользователя
@@ -652,6 +708,7 @@ components:
         coordinates:
           type: string
           example: latitude 52.370216 longitude 4.895168
+
     getOffer:
       type: object
 
@@ -696,6 +753,10 @@ components:
           type: number
           example: 7
 
+        conveniences:
+          type: array
+          example: [ Baby seat, Fridge ]
+
     comment:
       type: object
 
@@ -724,7 +785,7 @@ components:
            type: string
            example: Комната класс!
 
-        userId:
+        user:
           type: string
           example: 6329c3d6a04ab1061c6425ea
 

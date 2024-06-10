@@ -19,6 +19,8 @@ export class DefaultAuthService implements AuthService {
     @inject(Component.Config) private readonly config: Config<RestSchema>,
   ) {}
 
+  private usingToken: string[] = [];
+
   public async authenticate(user: UserEntity): Promise<string> {
     const jwtSecret = this.config.get('JWT_SECRET');
     const secretKey = crypto.createSecretKey(jwtSecret, 'utf-8');
@@ -49,5 +51,14 @@ export class DefaultAuthService implements AuthService {
     }
 
     return user;
+  }
+
+  public async invalidateToken(token: string): Promise<string> {
+    const tokenIndex = this.usingToken.findIndex((tok) => tok === token);
+    if (tokenIndex !== -1) {
+      this.usingToken.splice(tokenIndex, 1);
+    }
+
+    return 'User is logged out';
   }
 }

@@ -42,7 +42,7 @@ export function createOffer(offerData: string): Offer {
     offerImages: offerImages.split(',').map((image) => image.trim()),
     isPremium: Boolean(parseInt(isPremium, 10)),
     isFavorite: Boolean(parseInt(isFavorite, 10)),
-    rating: [Number.parseInt(rating, 10)],
+    rating: Number.parseInt(rating, 10),
     housingType: housingType as HousingType,
     roomNumber: Number.parseInt(roomNumber, 10),
     guestNumber: Number.parseInt(guestNumber, 10),

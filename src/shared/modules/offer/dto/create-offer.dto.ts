@@ -2,8 +2,8 @@ import {Convenience, HousingType} from '../../../../types/index.js';
 import {
   IsArray,
   IsBoolean,
-  IsDateString, IsEnum, IsIn, IsInt,
-  IsNumber, IsOptional, IsString,
+  IsEnum, IsIn, IsInt, IsMongoId,
+  IsOptional, IsString,
   Max,
   MaxLength,
   Min,
@@ -20,27 +20,14 @@ export class CreateOfferDto {
   @MaxLength(1024, { message: OfferDTOValidationMessage.name.maxLength})
   public description: string;
 
-  @IsDateString({}, { message: OfferDTOValidationMessage.date.invalidFormat })
-  public date: Date;
-
   @IsIn(['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'], { message: OfferDTOValidationMessage.city.invalidCity})
   public city: string;
 
-  @IsArray({message: OfferDTOValidationMessage.offerImages.invalidFormat})
-  @IsString({each: true, message: OfferDTOValidationMessage.offerImages.invalidType})
-  public offerImages: string[];
+  @IsString()
+  public imagePreview: string;
 
   @IsBoolean({ message: OfferDTOValidationMessage.isPremium.invalidFormat})
   public isPremium: boolean;
-
-  @IsBoolean({ message: OfferDTOValidationMessage.isFavorite.invalidFormat})
-  public isFavorite: boolean;
-
-  @IsOptional()
-  @Min(1, { message: OfferDTOValidationMessage.rating.min})
-  @Max(5, { message: OfferDTOValidationMessage.rating.max})
-  @IsNumber({maxDecimalPlaces: 1}, {message: OfferDTOValidationMessage.rating.invalidFormat})
-  public rating: number;
 
   @IsEnum(HousingType, {message: OfferDTOValidationMessage.housingType.invalidFormat})
   public housingType: HousingType;
@@ -64,10 +51,9 @@ export class CreateOfferDto {
   @IsEnum(Convenience, {each: true, message: OfferDTOValidationMessage.conveniences.invalidType})
   public conveniences: Convenience[];
 
+  @IsOptional()
+  @IsMongoId()
   public user: string;
-
-  @IsInt({message: OfferDTOValidationMessage.commentsNumber.invalidFormat})
-  public commentsNumber: number;
 
   @IsArray({ message: OfferDTOValidationMessage.coordinates.invalidFormat})
   @IsString({each: true, message: OfferDTOValidationMessage.coordinates.invalidType})

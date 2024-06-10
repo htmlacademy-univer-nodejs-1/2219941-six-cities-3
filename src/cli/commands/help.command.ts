@@ -9,7 +9,7 @@ export class HelpCommand implements Command {
   public async execute(..._parametrs: string[]): Promise<void> {
     console.info(`${chalk.green(`
         Программа для подготовки данных для REST API сервера`)}
-        Пример: cli.js --<command> [--arguments]
+        Пример: npx tsx ./src/main.cli.ts --<command> [--arguments]
         Команды:
             ${chalk.magentaBright('--version')}:                   # выводит номер версии приложения
             ${chalk.magentaBright('--help')}:                      # выводит список и описание всех поддерживаемых аргументов

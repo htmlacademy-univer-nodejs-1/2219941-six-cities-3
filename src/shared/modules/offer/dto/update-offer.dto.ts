@@ -20,8 +20,8 @@ export class UpdateOfferDto {
   public name?: string;
 
   @IsOptional()
-  @MinLength(20, { message: OfferDTOValidationMessage.name.minLength})
-  @MaxLength(1024, { message: OfferDTOValidationMessage.name.maxLength})
+  @MinLength(20, { message: OfferDTOValidationMessage.description.minLength})
+  @MaxLength(1024, { message: OfferDTOValidationMessage.description.maxLength})
   public description?: string;
 
   @IsOptional()
@@ -33,7 +33,6 @@ export class UpdateOfferDto {
   public city?: string;
 
   @IsOptional()
-  @MaxLength(50, { message: OfferDTOValidationMessage.imagePreview.maxLength})
   public imagePreview?: string;
 
   @IsOptional()
